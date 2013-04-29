@@ -243,6 +243,7 @@ module Gruff
 
       @scale = @columns / @raw_columns
 
+      @rendered = false
       vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
       @font = File.exists?(vera_font_path) ? vera_font_path : nil
 
@@ -423,7 +424,10 @@ module Gruff
 
     # Return the graph as a rendered binary blob.
     def to_blob(fileformat='PNG')
-      draw()
+      if not (@rendered)
+        draw()
+        @rendered = true
+      end
       return @base_image.to_blob do
         self.format = fileformat
       end
